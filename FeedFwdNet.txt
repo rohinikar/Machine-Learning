@@ -1,0 +1,21 @@
+p=0
+q=1
+data = (q-p).*rand(2,200) + p;
+testdata = (q-p).*rand(2,200) + p;
+a=0.5
+b=0.6
+r=0.4
+temp = (data(1,:) - a).^2 + (data(2,:) - b).^2 - r.^2
+for k = 1:200
+target(1,k) = isreal(sqrt(temp(1,k)));
+end
+net=feedforwardnet(10);
+net = configure(net,data,target)
+net.divideParam.trainRatio = 100/200;
+net.divideParam.valRatio   = 0/200;
+net.divideParam.testRatio  = 100/200;
+bias = [double(biasvalue);double(biasvalue);double(biasvalue);double(biasvalue);double(biasvalue);double(biasvalue);double(biasvalue);double(biasvalue);double(biasvalue);double(biasvalue)]
+net.b{1,1} = bias
+net.trainParam.epochs = 20
+net=train(net,data,target);
+net.b{2,1}
